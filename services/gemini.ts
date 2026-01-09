@@ -43,10 +43,17 @@ export async function scanReceipt(base64Image: string): Promise<ReceiptData> {
   "tax": number (without currency symbol),
   "total": number (without currency symbol),
   "confidence": number between 0 and 1 indicating extraction accuracy,
-  "currency": "USD" or appropriate currency code
+  "currency": "USD" or appropriate currency code,
+  "items": [
+    {
+      "description": "item description",
+      "quantity": number,
+      "price": number (unit price)
+    }
+  ]
 }
 
-Be very precise with amounts and dates. Return ONLY the JSON, no other text.`,
+Be very precise with amounts, dates, and individual items. For items, if quantity is not clear, assume 1. Return ONLY the JSON, no other text.`,
             },
           ],
         },

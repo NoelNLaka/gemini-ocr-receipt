@@ -32,9 +32,9 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest pl-1">Merchant</label>
           <div className="flex w-full items-stretch rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-background-dark/50 focus-within:ring-2 ring-primary/50 transition-all">
-            <input 
+            <input
               readOnly={!isEditable}
-              className="flex-1 bg-transparent border-none text-gray-900 dark:text-white h-14 px-4 text-lg font-semibold focus:ring-0" 
+              className="flex-1 bg-transparent border-none text-gray-900 dark:text-white h-14 px-4 text-lg font-semibold focus:ring-0"
               value={data.merchant}
               onChange={(e) => handleFieldChange('merchant', e.target.value)}
             />
@@ -49,9 +49,9 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest pl-1">Date</label>
             <div className="flex w-full items-stretch rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-background-dark/50">
-              <input 
+              <input
                 readOnly={!isEditable}
-                className="flex-1 bg-transparent border-none text-gray-900 dark:text-white h-14 px-4 text-base font-semibold focus:ring-0" 
+                className="flex-1 bg-transparent border-none text-gray-900 dark:text-white h-14 px-4 text-base font-semibold focus:ring-0"
                 value={data.date}
                 onChange={(e) => handleFieldChange('date', e.target.value)}
               />
@@ -60,7 +60,7 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest pl-1">Category</label>
             <div className="flex w-full items-stretch rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-background-dark/50">
-              <select 
+              <select
                 disabled={!isEditable}
                 className="flex-1 bg-transparent border-none text-gray-900 dark:text-white h-14 px-4 text-base font-semibold focus:ring-0 appearance-none cursor-pointer"
                 value={data.category}
@@ -76,6 +76,35 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
           </div>
         </div>
 
+        {/* Line Items Section */}
+        {data.items && data.items.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest pl-1">Line Items</label>
+            <div className="bg-gray-50 dark:bg-background-dark/30 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-gray-100 dark:bg-gray-800/50">
+                  <tr>
+                    <th className="px-4 py-2 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase">Item</th>
+                    <th className="px-4 py-2 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase text-center w-12">Qty</th>
+                    <th className="px-4 py-2 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase text-right w-20">Price</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  {data.items.map((item, idx) => (
+                    <tr key={idx} className="group">
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">{item.description}</td>
+                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">{item.quantity}</td>
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-white font-bold text-right">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* Financials Section */}
         <div className="bg-gray-50 dark:bg-background-dark/30 rounded-2xl p-4 border border-gray-100 dark:border-gray-800">
           <div className="space-y-3">
@@ -83,11 +112,11 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
               <span className="text-gray-500 dark:text-gray-400 font-medium">Subtotal</span>
               <div className="flex items-center">
                 <span className="text-gray-400 font-semibold mr-1">$</span>
-                <input 
+                <input
                   readOnly={!isEditable}
                   type="number"
                   step="0.01"
-                  className="w-24 text-right bg-transparent border-none p-0 text-gray-900 dark:text-white font-semibold focus:ring-0" 
+                  className="w-24 text-right bg-transparent border-none p-0 text-gray-900 dark:text-white font-semibold focus:ring-0"
                   value={data.subtotal}
                   onChange={(e) => handleFieldChange('subtotal', parseFloat(e.target.value) || 0)}
                 />
@@ -100,11 +129,11 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
               </div>
               <div className="flex items-center">
                 <span className="text-gray-400 font-semibold mr-1">$</span>
-                <input 
+                <input
                   readOnly={!isEditable}
                   type="number"
                   step="0.01"
-                  className="w-24 text-right bg-transparent border-none p-0 text-gray-900 dark:text-white font-semibold focus:ring-0" 
+                  className="w-24 text-right bg-transparent border-none p-0 text-gray-900 dark:text-white font-semibold focus:ring-0"
                   value={data.tax}
                   onChange={(e) => handleFieldChange('tax', parseFloat(e.target.value) || 0)}
                 />
@@ -115,11 +144,11 @@ const DetailsForm: React.FC<DetailsFormProps> = ({ data, onChange, isEditable })
               <span className="text-gray-900 dark:text-white font-bold text-lg">Total</span>
               <div className="flex items-center">
                 <span className="text-primary font-bold text-xl mr-1">$</span>
-                <input 
+                <input
                   readOnly={!isEditable}
                   type="number"
                   step="0.01"
-                  className="w-32 text-right bg-transparent border-none p-0 text-primary dark:text-primary font-bold text-2xl focus:ring-0" 
+                  className="w-32 text-right bg-transparent border-none p-0 text-primary dark:text-primary font-bold text-2xl focus:ring-0"
                   value={data.total}
                   onChange={(e) => handleFieldChange('total', parseFloat(e.target.value) || 0)}
                 />

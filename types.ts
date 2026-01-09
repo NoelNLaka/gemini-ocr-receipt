@@ -1,4 +1,10 @@
 
+export interface ReceiptItem {
+  description: string;
+  quantity: number;
+  price: number;
+}
+
 export interface ReceiptData {
   merchant: string;
   date: string;
@@ -8,6 +14,7 @@ export interface ReceiptData {
   total: number;
   confidence: number;
   currency: string;
+  items: ReceiptItem[];
 }
 
 export type AppState = 'IDLE' | 'SCANNING' | 'VERIFYING' | 'SUCCESS';
