@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/container-queries";
+
+@theme {
+  --color-primary: #3e6b74;
+  --color-accent: #DAAF72;
+  --color-background-light: #f7f7f8;
+  --color-background-dark: #1a1f23;
+  --color-surface-dark: #262b30;
+
+  --font-display: "Manrope", sans-serif;
+
+  --radius-2xl: 1.5rem;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  background-color: #1a1f23;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #434a4c;
+  border-radius: 10px;
+}

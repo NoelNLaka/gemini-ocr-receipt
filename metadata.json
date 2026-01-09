@@ -1,0 +1,7 @@
+{
+  "name": "ScanVerify - Smart Receipt Scanner",
+  "description": "An AI-powered receipt scanning and verification tool that extracts merchant details, dates, and financial information with high accuracy using Gemini.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
