@@ -1,9 +1,10 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { AppState, ReceiptData } from './types';
 import { scanReceipt } from './services/gemini';
 import ReceiptViewer from './components/ReceiptViewer';
 import DetailsForm from './components/DetailsForm';
+import CircularProgress from './components/CircularProgress';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>('IDLE');
@@ -11,6 +12,39 @@ const App: React.FC = () => {
   const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
   const [isEditable, setIsEditable] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [scanProgress, setScanProgress] = useState(0);
+  const scanCompleteRef = useRef(false);
+
+  // Simulate progress while scanning
+  useEffect(() => {
+    if (appState !== 'SCANNING') {
+      setScanProgress(0);
+      scanCompleteRef.current = false;
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setScanProgress((prev) => {
+        // If scan is complete, jump to 100%
+        if (scanCompleteRef.current) {
+          return 100;
+        }
+        // Slow down as we approach 90% (never reach 100% until actually complete)
+        if (prev >= 90) {
+          return Math.min(prev + 0.5, 95);
+        }
+        if (prev >= 70) {
+          return prev + 1;
+        }
+        if (prev >= 50) {
+          return prev + 2;
+        }
+        return prev + 3;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [appState]);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -23,6 +57,11 @@ const App: React.FC = () => {
         setError(null);
         try {
           const data = await scanReceipt(base64);
+          // Signal that scan is complete to show 100%
+          scanCompleteRef.current = true;
+          setScanProgress(100);
+          // Brief delay to show 100% before transitioning
+          await new Promise(resolve => setTimeout(resolve, 300));
           setReceiptData(data);
           setAppState('VERIFYING');
         } catch (err) {
@@ -77,8 +116,11 @@ const App: React.FC = () => {
           </div>
         </div>
         <h2 className="text-2xl font-bold mb-2">Analyzing Receipt...</h2>
-        <p className="text-gray-400">Our AI is extracting the details for you.</p>
-        
+        <p className="text-gray-400 mb-6">Our AI is extracting the details for you.</p>
+
+        {/* Circular Progress Indicator */}
+        <CircularProgress progress={scanProgress} size={90} strokeWidth={6} />
+
         <style>{`
           @keyframes scan {
             0% { top: 0; }

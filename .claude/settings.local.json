@@ -5,7 +5,8 @@
       "Bash(npm install:*)",
       "Bash(xcopy:*)",
       "Bash(robocopy:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }
